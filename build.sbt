@@ -330,3 +330,17 @@ lazy val prometheusBackend: Project = (project in file("metrics/prometheus-backe
     )
   )
   .dependsOn(coreJVM)
+
+lazy val benchmark: Project = (project in file("benchmark"))
+  .settings(
+    name := "benchmark",
+    libraryDependencies ++= Seq(
+      "com.storm-enroute" %% "scalameter" % "0.10" % "test",
+      "org.mock-server" % "mockserver-netty" % "5.3.0" % "test",
+      akkaStreams
+    ),
+    testFrameworks += new TestFramework("org.scalameter.ScalaMeterFramework"),
+    parallelExecution in Test := false,
+    logBuffered := false
+  )
+  .dependsOn(coreJVM, akkaHttpBackend)
